@@ -41,21 +41,21 @@ export function Header() {
           <span className="text-lg font-bold whitespace-nowrap sm:hidden">比較ガイド</span>
         </Link>
 
-        {/* デスクトップナビゲーション */}
-        <nav className="hidden md:flex md:items-center md:space-x-6">
+        {/* デスクトップナビゲーション - xlサイズ以上で表示 */}
+        <nav className="hidden xl:flex xl:items-center xl:gap-6">
           {navigation.map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground whitespace-nowrap"
             >
               {item.name}
             </Link>
           ))}
         </nav>
 
-        {/* デスクトップCTAボタン */}
-        <div className="hidden md:flex md:items-center md:space-x-2">
+        {/* デスクトップCTAボタン - mdサイズ以上で表示 */}
+        <div className="hidden md:flex md:items-center md:gap-2">
           <SearchDialog />
           <Link
             href="/compare"

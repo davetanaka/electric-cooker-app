@@ -81,36 +81,40 @@ export function SideBySideContent() {
         </div>
       )}
 
+      {/* スティッキー製品名バー - overflow外に配置 */}
+      {compareProducts.length > 0 && (
+        <div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b mb-4 -mx-4 px-4 py-3">
+          <div className="container mx-auto">
+            <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${compareProducts.length}, 1fr)` }}>
+              {compareProducts.map((product) => (
+                <div key={product.id} className="flex items-center justify-between">
+                  <div className="min-w-0">
+                    <p className="text-xs text-muted-foreground truncate">
+                      {product.specs.basic.manufacturer}
+                    </p>
+                    <p className="font-semibold truncate">
+                      {product.specs.basic.productName}
+                    </p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 shrink-0"
+                    onClick={() => removeFromCompare(product.id)}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 比較テーブル */}
       {compareProducts.length > 0 && (
         <div className="overflow-x-auto">
           <div className="min-w-[640px]">
-            {/* スティッキー製品名バー */}
-            <div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b mb-4 -mx-4 px-4 py-3">
-              <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${compareProducts.length}, 1fr)` }}>
-                {compareProducts.map((product) => (
-                  <div key={product.id} className="flex items-center justify-between">
-                    <div className="min-w-0">
-                      <p className="text-xs text-muted-foreground truncate">
-                        {product.specs.basic.manufacturer}
-                      </p>
-                      <p className="font-semibold truncate">
-                        {product.specs.basic.productName}
-                      </p>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 shrink-0"
-                      onClick={() => removeFromCompare(product.id)}
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* 製品ヘッダー（詳細カード） */}
             <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${compareProducts.length}, 1fr)` }}>
               {compareProducts.map((product) => (
