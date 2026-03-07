@@ -165,7 +165,10 @@ export function ChatPageContent() {
       {/* チャットエリア */}
       <Card className="mb-4">
         <CardContent className="p-0">
-          <div className="h-[500px] overflow-y-auto p-4 space-y-4">
+          <div className={cn(
+            "overflow-y-auto p-4 space-y-4",
+            messages.length > 0 ? "h-[500px]" : "min-h-0"
+          )}>
             {/* ローディング中 */}
             {!isLoaded && (
               <div className="flex items-center justify-center h-full text-muted-foreground">
