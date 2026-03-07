@@ -84,7 +84,12 @@ export function SideBySideContent() {
       {/* スティッキー製品名バー */}
       {compareProducts.length > 0 && (
         <div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b mb-4 py-3">
-          <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${compareProducts.length}, 1fr)` }}>
+          <div
+            className="grid gap-4 px-4"
+            style={{ gridTemplateColumns: `120px repeat(${compareProducts.length}, 1fr)` }}
+          >
+            {/* ラベル列のスペース */}
+            <div />
             {compareProducts.map((product) => (
               <div key={product.id} className="flex items-center justify-between">
                 <div className="min-w-0">

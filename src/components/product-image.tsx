@@ -36,28 +36,13 @@ export function ProductImage({
   // 画像パス
   const imagePath = `/images/products/${productId}.png`;
 
-  // プレースホルダーの背景色（製品IDに基づいて一意の色を生成）
-  const getBackgroundColor = (id: string) => {
-    const colors = [
-      "bg-blue-100 dark:bg-blue-900/30",
-      "bg-green-100 dark:bg-green-900/30",
-      "bg-purple-100 dark:bg-purple-900/30",
-      "bg-orange-100 dark:bg-orange-900/30",
-      "bg-pink-100 dark:bg-pink-900/30",
-      "bg-teal-100 dark:bg-teal-900/30",
-    ];
-    const index = id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
-    return colors[index];
-  };
-
   // エラー時またはプレースホルダー
   if (hasError) {
     return (
       <div
         className={cn(
-          "flex flex-col items-center justify-center rounded-lg",
+          "flex flex-col items-center justify-center rounded-lg bg-muted",
           sizeClasses[size],
-          getBackgroundColor(productId),
           className
         )}
       >
@@ -74,7 +59,6 @@ export function ProductImage({
       className={cn(
         "relative rounded-lg overflow-hidden",
         sizeClasses[size],
-        getBackgroundColor(productId),
         className
       )}
     >
