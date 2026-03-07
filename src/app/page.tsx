@@ -27,8 +27,8 @@ export default function Home() {
             </div>
 
             <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-              カタログに載っていない情報も含めた、
-              <span className="text-primary">消費者のための横断比較</span>
+              電気調理鍋
+              <span className="text-primary"> 比較ガイド</span>
             </h1>
 
             <p className="mb-8 text-lg text-muted-foreground md:text-xl">
