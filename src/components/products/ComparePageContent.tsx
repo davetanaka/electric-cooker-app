@@ -98,7 +98,7 @@ export function ComparePageContent() {
                       >
                         <ProductCard product={product} />
                       </Link>
-                      <div className="absolute top-2 right-2 flex items-center gap-1">
+                      <div className="absolute top-2 right-2 flex items-center gap-1 bg-background/80 backdrop-blur-sm rounded-md p-0.5">
                         <CompareButton productId={product.id} />
                         <FavoriteButton productId={product.id} />
                       </div>

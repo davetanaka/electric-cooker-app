@@ -33,11 +33,12 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* ロゴ */}
-        <Link href="/" className="flex items-center space-x-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+        <Link href="/" className="flex items-center space-x-2 shrink-0">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shrink-0">
             <Search className="h-4 w-4" />
           </div>
-          <span className="text-lg font-bold">電気調理鍋 比較ガイド</span>
+          <span className="text-lg font-bold whitespace-nowrap hidden sm:inline">電気調理鍋 比較ガイド</span>
+          <span className="text-lg font-bold whitespace-nowrap sm:hidden">比較ガイド</span>
         </Link>
 
         {/* デスクトップナビゲーション */}
