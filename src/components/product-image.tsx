@@ -33,8 +33,8 @@ export function ProductImage({
     lg: "h-48 w-48",
   };
 
-  // 画像パス（実際の画像がある場合）
-  const imagePath = `/images/products/${productId}.webp`;
+  // 画像パス
+  const imagePath = `/images/products/${productId}.png`;
 
   // プレースホルダーの背景色（製品IDに基づいて一意の色を生成）
   const getBackgroundColor = (id: string) => {
