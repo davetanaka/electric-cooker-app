@@ -85,6 +85,7 @@ export function SideBySideContent() {
       {compareProducts.length > 0 && (
         <div className="mb-6">
           <div
+            key={`cards-${compareProducts.length}`}
             className="grid gap-4"
             style={{ gridTemplateColumns: `120px repeat(${compareProducts.length}, 1fr)` }}
           >
@@ -126,6 +127,7 @@ export function SideBySideContent() {
       {compareProducts.length > 0 && (
         <div className="sticky top-16 z-40 bg-background/95 backdrop-blur border-b mb-4 py-3">
           <div
+            key={`sticky-${compareProducts.length}`}
             className="grid gap-4 px-4"
             style={{ gridTemplateColumns: `120px repeat(${compareProducts.length}, 1fr)` }}
           >
