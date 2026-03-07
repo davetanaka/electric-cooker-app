@@ -58,37 +58,178 @@
      - `Product`: 統合型（Layer 1 + Layer 2）
      - `FilterCriteria`: フィルター条件型
    - [products.ts](src/lib/products.ts) - 6社製品データ
-     - シャープ ホットクック KN-HW24H
-     - パナソニック オートクッカー ビストロ NF-AC1000
-     - ティファール ラクラ・クッカー プロ CY3811J0
-     - アイリスオーヤマ シェフドラム KDAC-IA2
-     - シロカ おうちシェフPRO L SP-5D151
-     - 象印 STAN. 自動調理なべ EL-KA23
 
 2. **比較画面** ([/compare](src/app/compare/page.tsx))
    - カード表示 / テーブル表示の切り替えUI（Tabs）
-   - [ProductCard.tsx](src/components/products/ProductCard.tsx)
-     - 主要スペック（価格、容量、機能バッジ）
-     - Layer 2評価（コミュニティ、購入後サポート）
-   - [FilterSidebar.tsx](src/components/products/FilterSidebar.tsx)
-     - 予算、容量、必須機能、メーカーのフィルターUI
-     - ※ロジックは次ステップで実装
+   - ProductCard, FilterSidebar コンポーネント
 
 3. **追加コンポーネント**
    - shadcn/ui: Table, Badge, Select, Checkbox, Tabs
 
-### データソース
+---
 
-- `doc/電気調理鍋_6社カタログ比較.xlsx` (Layer 1)
-- `doc/電気調理鍋_第2層データ_SNSコミュニティ調査.xlsx` (Layer 2)
+# Step 3: フィルタリング・製品詳細・AIチャットの実装
+
+## タスク一覧
+
+- [x] フィルタリングロジックの実装
+- [x] 製品詳細ページの作成 (/products/[id])
+- [x] AIチャット画面の実装 (/chat)
+- [x] 動作確認とGitコミット
+
+---
+
+## 完了後レビュー
+
+### 実装内容
+
+1. **フィルタリング機能**
+   - [useProductFilter.ts](src/hooks/useProductFilter.ts) - カスタムフック
+     - 予算（上限・下限）
+     - 調理容量
+     - 必須機能（圧力、かきまぜ、Wi-Fi、食洗機）
+     - メーカー選択
+   - [ComparePageContent.tsx](src/components/products/ComparePageContent.tsx) - フィルター統合
+   - 空状態UI対応（条件に一致する製品がない場合）
+
+2. **製品詳細ページ** ([/products/[id]](src/app/products/[id]/page.tsx))
+   - Layer 1: 全スペック表示
+     - 基本情報、容量・サイズ、調理機能
+     - メニュー・レシピ、便利機能、電源
+     - 独自特徴
+   - Layer 2: コミュニティ評価
+     - 公式コミュニティ、SNS活発度、インスタ映え度
+     - お手入れ評判、購入後サポート
+   - 総合コメント、ターゲットユーザー、データ出典
+   - SSG対応（generateStaticParams）
+
+3. **AIチャット機能** ([/chat](src/app/chat/page.tsx))
+   - [chat-prompt.ts](src/lib/chat-prompt.ts) - システムプロンプト生成
+     - 6社製品データをコンテキストに含む
+     - 中立的なアドバイザー設定
+     - 出典明記ルール
+   - [/api/chat/route.ts](src/app/api/chat/route.ts) - APIルート
+     - Vercel AI SDK + Claude API
+     - ストリーミング応答
+   - [ChatPageContent.tsx](src/components/chat/ChatPageContent.tsx)
+     - メッセージUI（ユーザー/AI）
+     - 例の質問クリックで入力
+     - ローディング・エラー表示
+
+### 環境変数
+
+```
+ANTHROPIC_API_KEY=your_api_key_here
+```
+
+`.env.example` に記載
 
 ### 動作確認
 
-- `npm run build` ✅ 成功（/, /compare 両方生成）
-- `/compare` ページで6製品がカード・テーブル両表示で確認可能
+- `npm run build` ✅ 成功
+  - `/` - トップページ
+  - `/compare` - 比較ページ（フィルタリング付き）
+  - `/chat` - AIチャット
+  - `/products/[id]` - 製品詳細（6ページ）
+  - `/api/chat` - APIルート
 
-### 次のステップ
+### ページ一覧
 
-- フィルタリングロジックの実装
-- 製品詳細ページの作成
-- AIチャット画面の実装
+| パス | 種別 | 説明 |
+|------|------|------|
+| / | Static | トップページ |
+| /compare | Static | 製品比較（フィルタリング） |
+| /chat | Static | AIチャット |
+| /products/[id] | SSG | 製品詳細（6製品） |
+| /api/chat | Dynamic | チャットAPI |
+
+---
+
+# Step 4: 品質チェックとデプロイ準備
+
+## タスク一覧
+
+- [x] UXとレスポンシブデザインの最終確認
+- [x] OGPタグとメタ情報の設定
+- [x] 製品詳細ページにOGPタグを追加
+- [x] npm run buildでビルド確認
+- [x] README.mdにVercelデプロイ手順を追記
+- [x] 最終報告
+
+---
+
+## 完了後レビュー
+
+### 実装内容
+
+1. **レスポンシブデザイン確認**
+   - 全ページでモバイル〜PCまでのレスポンシブ対応を確認
+   - Header: モバイルメニュー (Sheet) / デスクトップナビゲーション
+   - 各ページ: `sm:`, `md:`, `lg:`, `xl:` ブレークポイントを使用
+
+2. **OGPタグ・メタ情報の強化**
+   - [layout.tsx](src/app/layout.tsx) - グローバルメタ情報
+     - `title.template` でページ別タイトル対応
+     - Twitter Card (`summary_large_image`)
+     - `robots` 設定
+   - [/compare](src/app/compare/page.tsx) - OGPタグ追加
+   - [/chat](src/app/chat/page.tsx) - OGPタグ追加
+   - [/products/[id]](src/app/products/[id]/page.tsx) - 動的OGP生成
+
+3. **不足ページの追加**
+   - [/about](src/app/about/page.tsx) - 「このサイトについて」ページ
+     - 情報ポリシー説明
+     - 比較対象製品一覧
+     - CTA（比較・AIチャット）
+
+4. **README.md更新**
+   - プロジェクト概要、技術スタック
+   - ローカル開発手順
+   - **Vercelデプロイ手順**（環境変数 `ANTHROPIC_API_KEY` の設定方法を明記）
+   - プロジェクト構成図
+
+### ビルド結果
+
+```
+npm run build ✅ 成功
+
+Route (app)
+├ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ƒ /api/chat
+├ ○ /chat
+├ ○ /compare
+└ ● /products/[id] (6製品)
+```
+
+### ページ一覧（最終）
+
+| パス | 種別 | 説明 |
+|------|------|------|
+| / | Static | トップページ |
+| /compare | Static | 製品比較（フィルタリング） |
+| /chat | Static | AIチャット |
+| /products/[id] | SSG | 製品詳細（6製品） |
+| /about | Static | このサイトについて |
+| /api/chat | Dynamic | チャットAPI |
+
+---
+
+## デプロイ準備完了
+
+**次のステップ（ユーザー側）:**
+1. GitHubリポジトリを作成してコードをpush
+2. VercelでGitHubリポジトリをインポート
+3. 環境変数 `ANTHROPIC_API_KEY` を設定
+4. デプロイ実行
+
+---
+
+## 今後の拡張可能性
+
+- 製品画像の追加
+- ユーザーフィードバック収集
+- 実売価格の自動更新
+- Google Analytics導入
+- 独自ドメイン取得

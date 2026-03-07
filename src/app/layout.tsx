@@ -15,7 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "電気調理鍋 比較ガイド | 6社横断比較",
+  title: {
+    default: "電気調理鍋 比較ガイド | 6社横断比較",
+    template: "%s | 電気調理鍋 比較ガイド",
+  },
   description:
     "電気調理鍋6社（ホットクック、ビストロ、クックフォーミー等）を公式スペックとSNS・コミュニティの生の声で横断比較。アフィリエイトなしの中立的な情報で、納得の1台を選べます。",
   keywords: [
@@ -33,6 +36,17 @@ export const metadata: Metadata = {
       "カタログに載っていない情報も含めた、消費者のための横断比較",
     type: "website",
     locale: "ja_JP",
+    siteName: "電気調理鍋 比較ガイド",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "電気調理鍋 比較ガイド | 6社横断比較",
+    description:
+      "カタログに載っていない情報も含めた、消費者のための横断比較",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

@@ -43,9 +43,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: "製品が見つかりません" };
   }
 
+  const title = product.specs.basic.productName;
+  const description = `${product.specs.basic.manufacturer} ${product.specs.basic.productName}の詳細スペック（${product.specs.basic.priceRange}）とユーザー評価。${product.community.overallComment}`;
+
   return {
-    title: `${product.specs.basic.productName} | 電気調理鍋 比較ガイド`,
-    description: `${product.specs.basic.manufacturer} ${product.specs.basic.productName}の詳細スペックとユーザー評価。${product.community.overallComment}`,
+    title,
+    description,
+    openGraph: {
+      title: `${title} | 電気調理鍋 比較ガイド`,
+      description,
+      type: "website",
+      locale: "ja_JP",
+    },
   };
 }
 
