@@ -12,9 +12,11 @@ import {
   Loader2,
   AlertCircle,
   RefreshCw,
+  Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
+import { useChatHistory } from "@/hooks/useChatHistory";
 
 interface Message {
   id: string;
@@ -33,7 +35,14 @@ const EXAMPLE_QUESTIONS = [
  * AIチャット画面のメインコンテンツ
  */
 export function ChatPageContent() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const {
+    messages,
+    isLoaded,
+    addMessage,
+    updateMessage,
+    clearHistory,
+    setMessages,
+  } = useChatHistory();
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -98,11 +107,7 @@ export function ChatPageContent() {
         const chunk = decoder.decode(value, { stream: true });
         content += chunk;
 
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantMessage.id ? { ...m, content } : m
-          )
-        );
+        updateMessage(assistantMessage.id, content);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "エラーが発生しました");
@@ -130,23 +135,47 @@ export function ChatPageContent() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       {/* ヘッダー */}
-      <div className="mb-8 text-center">
-        <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-4">
-          <Bot className="h-6 w-6 text-primary" />
+      <div className="mb-8">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-4">
+            <Bot className="h-6 w-6 text-primary" />
+          </div>
+          <h1 className="text-3xl font-bold mb-2">AIに相談</h1>
+          <p className="text-muted-foreground">
+            電気調理鍋選びの相談をAIにできます。6社のデータに基づいて、
+            あなたに合った製品を提案します。
+          </p>
         </div>
-        <h1 className="text-3xl font-bold mb-2">AIに相談</h1>
-        <p className="text-muted-foreground">
-          電気調理鍋選びの相談をAIにできます。6社のデータに基づいて、
-          あなたに合った製品を提案します。
-        </p>
+        {/* 履歴クリアボタン */}
+        {messages.length > 0 && isLoaded && (
+          <div className="flex justify-end mt-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearHistory}
+              className="text-muted-foreground"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              履歴をクリア
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* チャットエリア */}
       <Card className="mb-4">
         <CardContent className="p-0">
           <div className="h-[500px] overflow-y-auto p-4 space-y-4">
+            {/* ローディング中 */}
+            {!isLoaded && (
+              <div className="flex items-center justify-center h-full text-muted-foreground">
+                <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                読み込み中...
+              </div>
+            )}
+
             {/* 初期メッセージ（会話がない場合） */}
-            {messages.length === 0 && (
+            {isLoaded && messages.length === 0 && (
               <div className="space-y-6">
                 <div className="flex gap-3">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">

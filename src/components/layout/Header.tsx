@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/sheet";
 import { Menu, Search, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { SearchDialog } from "@/components/search-dialog";
 
 /**
  * ヘッダーナビゲーションコンポーネント
@@ -22,6 +24,7 @@ export function Header() {
   const navigation = [
     { name: "ホーム", href: "/" },
     { name: "製品比較", href: "/compare" },
+    { name: "お気に入り", href: "/favorites" },
     { name: "AIに相談", href: "/chat" },
     { name: "このサイトについて", href: "/about" },
   ];
@@ -51,7 +54,8 @@ export function Header() {
         </nav>
 
         {/* デスクトップCTAボタン */}
-        <div className="hidden md:flex md:items-center md:space-x-3">
+        <div className="hidden md:flex md:items-center md:space-x-2">
+          <SearchDialog />
           <Link
             href="/compare"
             className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
@@ -66,19 +70,21 @@ export function Header() {
             <MessageCircle className="mr-2 h-4 w-4" />
             AIに相談
           </Link>
+          <ThemeToggle />
         </div>
 
         {/* モバイルメニュー */}
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "icon" }),
-              "md:hidden"
-            )}
-          >
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">メニューを開く</span>
-          </SheetTrigger>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "icon" })
+              )}
+            >
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">メニューを開く</span>
+            </SheetTrigger>
           <SheetContent side="right" className="w-[300px] sm:w-[400px]">
             <SheetTitle className="sr-only">ナビゲーションメニュー</SheetTitle>
             <div className="flex flex-col space-y-4 mt-8">
@@ -115,7 +121,8 @@ export function Header() {
               </div>
             </div>
           </SheetContent>
-        </Sheet>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

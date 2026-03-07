@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ProductImage } from "@/components/product-image";
 import type { Product } from "@/lib/types";
 import {
   Flame,
@@ -26,21 +27,32 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="h-full hover:shadow-lg transition-shadow">
       <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <p className="text-sm text-muted-foreground">
-              {specs.basic.manufacturer}
-            </p>
-            <h3 className="text-lg font-semibold leading-tight">
-              {specs.basic.productName}
-            </h3>
-            <p className="text-xs text-muted-foreground mt-1">
-              {specs.basic.modelNumber}
-            </p>
+        <div className="flex items-start gap-3">
+          <ProductImage
+            productId={product.id}
+            productName={specs.basic.productName}
+            manufacturer={specs.basic.manufacturer}
+            size="sm"
+            className="shrink-0"
+          />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="text-sm text-muted-foreground">
+                  {specs.basic.manufacturer}
+                </p>
+                <h3 className="text-lg font-semibold leading-tight">
+                  {specs.basic.productName}
+                </h3>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {specs.basic.modelNumber}
+                </p>
+              </div>
+              <Badge variant="secondary" className="shrink-0">
+                {specs.basic.productType.includes("圧力") ? "圧力対応" : "非圧力"}
+              </Badge>
+            </div>
           </div>
-          <Badge variant="secondary" className="shrink-0">
-            {specs.basic.productType.includes("圧力") ? "圧力対応" : "非圧力"}
-          </Badge>
         </div>
       </CardHeader>
 

@@ -25,6 +25,8 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ProductDetailActions } from "@/components/products/ProductDetailActions";
+import { ProductImage } from "@/components/product-image";
 import type { Metadata } from "next";
 import type { FeatureSupport, RatingLevel } from "@/lib/types";
 
@@ -96,19 +98,38 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
       {/* ヘッダー */}
       <div className="mb-8">
-        <p className="text-muted-foreground mb-1">
-          {specs.basic.manufacturer}
-        </p>
-        <h1 className="text-3xl font-bold mb-2">
-          {specs.basic.productName}
-        </h1>
-        <p className="text-muted-foreground mb-4">
-          型番: {specs.basic.modelNumber}
-        </p>
-        <div className="flex flex-wrap gap-2">
-          <Badge>{specs.basic.productType}</Badge>
-          <Badge variant="outline">{specs.basic.priceRange}</Badge>
-          <Badge variant="outline">{specs.basic.releaseDate}発売</Badge>
+        <div className="flex flex-col sm:flex-row gap-6">
+          {/* 製品画像 */}
+          <ProductImage
+            productId={product.id}
+            productName={specs.basic.productName}
+            manufacturer={specs.basic.manufacturer}
+            size="lg"
+            className="mx-auto sm:mx-0"
+          />
+
+          {/* 製品情報 */}
+          <div className="flex-1">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-muted-foreground mb-1">
+                  {specs.basic.manufacturer}
+                </p>
+                <h1 className="text-3xl font-bold mb-2">
+                  {specs.basic.productName}
+                </h1>
+                <p className="text-muted-foreground mb-4">
+                  型番: {specs.basic.modelNumber}
+                </p>
+              </div>
+              <ProductDetailActions productId={product.id} productName={specs.basic.productName} />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Badge>{specs.basic.productType}</Badge>
+              <Badge variant="outline">{specs.basic.priceRange}</Badge>
+              <Badge variant="outline">{specs.basic.releaseDate}発売</Badge>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -15,6 +15,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LayoutGrid, TableIcon, Check, X } from "lucide-react";
 import { useProductFilter } from "@/hooks/useProductFilter";
+import { FavoriteButton } from "@/components/favorite-button";
+import { CompareButton } from "@/components/compare-button";
+import { CompareFloatingBar } from "@/components/compare/CompareFloatingBar";
 import Link from "next/link";
 
 /**
@@ -88,13 +91,18 @@ export function ComparePageContent() {
               ) : (
                 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                   {filteredProducts.map((product) => (
-                    <Link
-                      key={product.id}
-                      href={`/products/${product.id}`}
-                      className="block hover:no-underline"
-                    >
-                      <ProductCard product={product} />
-                    </Link>
+                    <div key={product.id} className="relative">
+                      <Link
+                        href={`/products/${product.id}`}
+                        className="block hover:no-underline"
+                      >
+                        <ProductCard product={product} />
+                      </Link>
+                      <div className="absolute top-2 right-2 flex items-center gap-1">
+                        <CompareButton productId={product.id} />
+                        <FavoriteButton productId={product.id} />
+                      </div>
+                    </div>
                   ))}
                 </div>
               )}
@@ -184,6 +192,9 @@ export function ComparePageContent() {
           </Tabs>
         </main>
       </div>
+
+      {/* 比較フローティングバー */}
+      <CompareFloatingBar />
     </div>
   );
 }
