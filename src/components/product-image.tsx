@@ -78,7 +78,6 @@ export function ProductImage({
  * 製品画像プレースホルダー（画像なしバージョン）
  */
 export function ProductImagePlaceholder({
-  productName,
   manufacturer,
   className,
   size = "md",

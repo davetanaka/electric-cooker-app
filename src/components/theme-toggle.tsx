@@ -1,31 +1,16 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 
 /**
  * テーマ切り替えボタン
  * ライト/ダーク/システム設定を循環
+ * next-themes の suppressHydrationWarning と組み合わせて使用
  */
 export function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  // SSRでのハイドレーションエラーを防ぐ
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <Button variant="ghost" size="icon" className="h-9 w-9">
-        <Sun className="h-4 w-4" />
-        <span className="sr-only">テーマを切り替え</span>
-      </Button>
-    );
-  }
 
   const cycleTheme = () => {
     if (theme === "system") {
@@ -43,6 +28,7 @@ export function ThemeToggle() {
       size="icon"
       onClick={cycleTheme}
       className="h-9 w-9"
+      suppressHydrationWarning
       title={
         theme === "system"
           ? "システム設定"

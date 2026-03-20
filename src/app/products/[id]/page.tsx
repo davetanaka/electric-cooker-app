@@ -6,8 +6,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { LinkButton } from "@/components/ui/link-button";
@@ -22,7 +20,6 @@ import {
   Wrench,
   Instagram,
   Sparkles,
-  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ProductDetailActions } from "@/components/products/ProductDetailActions";

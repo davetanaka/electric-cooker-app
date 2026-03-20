@@ -19,26 +19,25 @@ interface CompareContextType {
 
 const CompareContext = createContext<CompareContextType | undefined>(undefined);
 
+/** localStorageから安全に読み込む */
+function loadFromStorage(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
 /**
  * 比較機能のプロバイダー
  * アプリ全体で比較リストの状態を共有
  */
 export function CompareProvider({ children }: { children: ReactNode }) {
-  const [compareList, setCompareList] = useState<string[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // 初期化時にlocalStorageから読み込み
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setCompareList(JSON.parse(stored));
-      }
-    } catch {
-      console.error("Failed to load compare list from localStorage");
-    }
-    setIsLoaded(true);
-  }, []);
+  const [compareList, setCompareList] = useState<string[]>(loadFromStorage);
+  // "use client" コンポーネントは常にクライアントで初期化されるため true
+  const isLoaded = true;
 
   // compareListが変更されたらlocalStorageに保存
   useEffect(() => {

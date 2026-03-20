@@ -4,26 +4,25 @@ import { useState, useEffect, useCallback } from "react";
 
 const STORAGE_KEY = "electric-cooker-favorites";
 
+/** localStorageから安全に読み込む */
+function loadFromStorage(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
 /**
  * お気に入り機能のカスタムフック
  * localStorageを使用して製品IDを永続化
  */
 export function useFavorites() {
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // 初期化時にlocalStorageから読み込み
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setFavorites(JSON.parse(stored));
-      }
-    } catch {
-      console.error("Failed to load favorites from localStorage");
-    }
-    setIsLoaded(true);
-  }, []);
+  const [favorites, setFavorites] = useState<string[]>(loadFromStorage);
+  // "use client" コンポーネントは常にクライアントで初期化されるため true
+  const isLoaded = true;
 
   // favoritesが変更されたらlocalStorageに保存
   useEffect(() => {

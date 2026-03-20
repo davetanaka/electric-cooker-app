@@ -15,7 +15,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { type Components } from "react-markdown";
 import { useChatHistory } from "@/hooks/useChatHistory";
 
 interface Message {
@@ -23,6 +23,21 @@ interface Message {
   role: "user" | "assistant";
   content: string;
 }
+
+/** Markdown内のリンクを安全にレンダリング（XSS対策） */
+const safeMarkdownComponents: Components = {
+  a: ({ href, children, ...props }) => {
+    // javascript: スキームなど危険なURLをブロック
+    const isSafe = href && (href.startsWith("http://") || href.startsWith("https://") || href.startsWith("/"));
+    return isSafe ? (
+      <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+        {children}
+      </a>
+    ) : (
+      <span>{children}</span>
+    );
+  },
+};
 
 const EXAMPLE_QUESTIONS = [
   "3人家族で圧力必須、予算3万円以内で探しています",
@@ -38,7 +53,6 @@ export function ChatPageContent() {
   const {
     messages,
     isLoaded,
-    addMessage,
     updateMessage,
     clearHistory,
     setMessages,
@@ -259,7 +273,9 @@ export function ChatPageContent() {
                     <p>{message.content}</p>
                   ) : (
                     <div className="prose prose-sm dark:prose-invert max-w-none">
-                      <ReactMarkdown>{message.content}</ReactMarkdown>
+                      <ReactMarkdown components={safeMarkdownComponents}>
+                        {message.content}
+                      </ReactMarkdown>
                     </div>
                   )}
                 </div>

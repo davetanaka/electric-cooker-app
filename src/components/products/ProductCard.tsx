@@ -127,10 +127,11 @@ export function ProductCard({ product }: ProductCardProps) {
  */
 function RatingStars({ rating }: { rating: number }) {
   return (
-    <div className="flex items-center gap-0.5">
+    <div className="flex items-center gap-0.5" role="img" aria-label={`${rating}点（5点満点）`}>
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
+          aria-hidden="true"
           className={`h-3.5 w-3.5 ${
             star <= rating
               ? "fill-yellow-400 text-yellow-400"

@@ -10,32 +10,30 @@ interface ChatMessage {
   content: string;
 }
 
+/** localStorageから安全に読み込む */
+function loadFromStorage(): ChatMessage[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return [];
+    const parsed = JSON.parse(stored);
+    return parsed.map((m: ChatMessage, index: number) => ({
+      ...m,
+      id: m.id || `${Date.now()}-${index}`,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 /**
  * チャット履歴管理のカスタムフック
  * localStorageを使用してメッセージを永続化
  */
 export function useChatHistory() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // 初期化時にlocalStorageから読み込み
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        // 古いデータ形式にも対応（id がない場合は生成）
-        const messagesWithId = parsed.map((m: ChatMessage, index: number) => ({
-          ...m,
-          id: m.id || `${Date.now()}-${index}`,
-        }));
-        setMessages(messagesWithId);
-      }
-    } catch {
-      console.error("Failed to load chat history from localStorage");
-    }
-    setIsLoaded(true);
-  }, []);
+  const [messages, setMessages] = useState<ChatMessage[]>(loadFromStorage);
+  // "use client" コンポーネントは常にクライアントで初期化されるため true
+  const isLoaded = true;
 
   // messagesが変更されたらlocalStorageに保存
   useEffect(() => {

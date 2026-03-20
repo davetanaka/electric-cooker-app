@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCompare } from "@/hooks/useCompare";
 import { products } from "@/lib/products";
 import { Button } from "@/components/ui/button";
@@ -432,10 +431,11 @@ function CompareRowRating({
       {products.map((product) => {
         const rating = getValue(product);
         return (
-          <div key={product.id} className="flex items-center gap-0.5">
+          <div key={product.id} className="flex items-center gap-0.5" role="img" aria-label={`${rating}点（5点満点）`}>
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
                 key={star}
+                aria-hidden="true"
                 className={`h-4 w-4 ${
                   star <= rating
                     ? "fill-yellow-400 text-yellow-400"
