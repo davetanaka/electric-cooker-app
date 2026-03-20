@@ -8,18 +8,20 @@
 
 - **アフィリエイトなし**: 購入リンクや広告は一切掲載しません
 - **Layer 1 + Layer 2 比較**: 公式スペックだけでなく、SNS・コミュニティの評判も掲載
-- **AIチャット相談**: 「3人家族で圧力必須」のような自然言語で相談可能
+- **AIチャット相談**: 「3人家族で圧力必須」のような自然言語で相談可能（入力バリデーション・レート制限付き）
 - **レスポンシブ対応**: スマートフォンからPCまで快適に閲覧
+- **アクセシビリティ**: 星評価・キーボードショートカット等に aria-label を設定
+- **Error Boundary**: ページレベルのエラーをキャッチし、ユーザーフレンドリーなフォールバックUIを表示
 
 ## 比較対象製品
 
 | メーカー | 製品名 |
 |---------|--------|
-| シャープ | ヘルシオ ホットクック KN-HW24H |
+| シャープ | ホットクック KN-HW24H |
 | パナソニック | ビストロ NF-AC1000 |
-| ティファール | ラクラ・クッカー プロ CY3811JP |
-| アイリスオーヤマ | ヘルシープラス KPC-MA2 |
-| シロカ | おうちシェフ PRO SP-2DP251 |
+| ティファール | ラクラ・クッカー プロ CY3811J0 |
+| アイリスオーヤマ | シェフドラム KDAC-IA2 |
+| シロカ | おうちシェフ Pro L SP-5D151 |
 | 象印 | STAN. EL-KA23 |
 
 ## 技術スタック
@@ -66,9 +68,11 @@ npm run dev
 | `/` | トップページ | Static |
 | `/compare` | 製品比較（フィルタリング機能付き） | Static |
 | `/chat` | AIチャット相談 | Static |
+| `/favorites` | お気に入り一覧 | Static |
+| `/side-by-side` | 横並び比較（最大3製品） | Static |
 | `/products/[id]` | 製品詳細ページ（6製品） | SSG |
 | `/about` | このサイトについて | Static |
-| `/api/chat` | チャットAPI | Dynamic |
+| `/api/chat` | チャットAPI（バリデーション・レート制限付き） | Dynamic |
 
 ## Vercel へのデプロイ
 
@@ -127,26 +131,43 @@ npm run lint
 ```
 src/
 ├── app/                    # Next.js App Router
-│   ├── api/chat/          # AIチャットAPIルート
-│   ├── chat/              # チャットページ
+│   ├── api/chat/          # AIチャットAPI（バリデーション・レート制限）
+│   ├── chat/              # チャットページ + Error Boundary
 │   ├── compare/           # 比較ページ
-│   ├── products/[id]/     # 製品詳細ページ
+│   ├── favorites/         # お気に入りページ
+│   ├── side-by-side/      # 横並び比較ページ
+│   ├── products/[id]/     # 製品詳細ページ + Error Boundary
 │   ├── about/             # このサイトについて
+│   ├── error.tsx          # グローバル Error Boundary
 │   ├── layout.tsx         # ルートレイアウト
 │   └── page.tsx           # トップページ
 ├── components/
-│   ├── chat/              # チャットUIコンポーネント
+│   ├── chat/              # チャットUI（XSSサニタイズ付きMarkdown）
+│   ├── compare/           # 横並び比較コンポーネント
+│   ├── favorites/         # お気に入りコンポーネント
 │   ├── layout/            # ヘッダー・フッター
 │   ├── products/          # 製品関連コンポーネント
 │   └── ui/                # shadcn/ui コンポーネント
+├── contexts/
+│   └── CompareContext.tsx  # 比較リストの状態管理
 ├── hooks/
+│   ├── useChatHistory.ts  # チャット履歴（localStorage永続化）
+│   ├── useCompare.ts      # 比較リスト操作
+│   ├── useFavorites.ts    # お気に入り（localStorage永続化）
 │   └── useProductFilter.ts # フィルタリングフック
 └── lib/
-    ├── chat-prompt.ts     # AIプロンプト生成
-    ├── products.ts        # 製品データ
+    ├── chat-prompt.ts     # AIプロンプト生成（キャッシュ付き）
+    ├── products.ts        # 製品データ（6社）
     ├── types.ts           # TypeScript型定義
     └── utils.ts           # ユーティリティ
 ```
+
+## セキュリティ
+
+- **Chat API**: リクエストボディの型・長さバリデーション、IPベースのレート制限（10req/min）
+- **Markdown XSS対策**: `javascript:` 等の危険なURLスキームをブロック
+- **poweredByHeader無効化**: レスポンスヘッダーからフレームワーク情報を除去
+- **reactStrictMode**: 潜在的バグの早期検出
 
 ## データ出典
 

@@ -226,9 +226,47 @@ Route (app)
 
 ---
 
+---
+
+# Step 5: セキュリティ強化・品質改善
+
+## タスク一覧
+
+- [x] Chat API 入力バリデーション（型・長さ・件数チェック）
+- [x] Chat API レート制限（IPベース 10req/min）
+- [x] システムプロンプトのキャッシュ化
+- [x] Markdown XSS 対策（危険なURLスキームをブロック）
+- [x] Error Boundary 追加（グローバル・チャット・製品詳細）
+- [x] アクセシビリティ改善（星評価 aria-label、検索ショートカット aria-label）
+- [x] set-state-in-effect エラー解消（localStorage初期化をuseState初期値に移動）
+- [x] 未使用 import/変数の全削除（lint warning 0）
+- [x] next.config.ts 強化（reactStrictMode, poweredByHeader: false）
+- [x] package.json name 修正（ai_guide_vol2 → electric-cooker-app）
+- [x] README.md 更新（セキュリティ、ページ構成、プロジェクト構成の反映）
+
+---
+
+## 完了後レビュー
+
+### 品質指標
+
+- ESLint: 0 errors, 0 warnings
+- TypeScript: コンパイル成功
+- Build: 全16ページ正常生成
+
+### セキュリティ改善
+
+| 対策 | 詳細 |
+|------|------|
+| 入力バリデーション | role/content 型チェック、最大50メッセージ、1メッセージ5000文字上限 |
+| レート制限 | IP単位で1分あたり10リクエスト |
+| XSS対策 | ReactMarkdown にカスタムリンクレンダラー（安全なスキームのみ許可） |
+| ヘッダー | poweredByHeader 無効化 |
+
+---
+
 ## 今後の拡張可能性
 
-- 製品画像の追加
 - ユーザーフィードバック収集
 - 実売価格の自動更新
 - Google Analytics導入
